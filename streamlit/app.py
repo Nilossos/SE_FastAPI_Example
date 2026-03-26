@@ -60,6 +60,10 @@ def render_sidebar():
         st.caption("По умолчанию из переменной `API_BASE_URL` в `.env` (см. `.env.example`).")
     return api_base
 
+def is_valid_text(text: str | None) -> bool:
+    """Проверка текста"""
+    return bool(text and text.strip())
+
 def main() -> None:
     st.set_page_config(
         page_title="Тональность текста",
@@ -82,10 +86,10 @@ def main() -> None:
 
     submitted = st.button("Отправить", type="primary")
 
-    if submitted and not (text or "").strip():
+    if submitted and not is_valid_text(text):
         st.warning("Введите непустой текст.")
 
-    if submitted and (text or "").strip():
+    if submitted and is_valid_text(text):
         url = api_base.rstrip("/") + PREDICT_PATH
 
         payload = handle_request(url, text)
